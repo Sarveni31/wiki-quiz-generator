@@ -1,0 +1,52 @@
+{
+  "id": 2,
+  "url": "https://en.wikipedia.org/wiki/Ada_Lovelace",
+  "title": "Ada Lovelace",
+  "summary": "Ada Lovelace was an English mathematician and writer known for her work on Charles Babbage's proposed Analytical Engine.",
+  "key_entities": {
+    "people": ["Ada Lovelace", "Charles Babbage", "Lord Byron"],
+    "organizations": ["University of London"],
+    "locations": ["England", "London"]
+  },
+  "sections": ["Biography", "Analytical Engine", "First computer program", "Legacy"],
+  "quiz": [
+    {
+      "question": "Ada Lovelace is best known for work connected to which machine?",
+      "options": ["Analytical Engine", "Difference Telescope", "Jacquard Locomotive", "Steam Microscope"],
+      "answer": "Analytical Engine",
+      "difficulty": "easy",
+      "explanation": "The article connects Lovelace's most famous work with Babbage's Analytical Engine."
+    },
+    {
+      "question": "Who designed the machine Lovelace wrote notes about?",
+      "options": ["Charles Babbage", "Isaac Newton", "Alan Turing", "Michael Faraday"],
+      "answer": "Charles Babbage",
+      "difficulty": "easy",
+      "explanation": "The Analytical Engine section names Charles Babbage as its designer."
+    },
+    {
+      "question": "What type of work is Lovelace often credited with writing?",
+      "options": ["An early computer program", "A chemical equation", "A legal code", "A railway timetable"],
+      "answer": "An early computer program",
+      "difficulty": "medium",
+      "explanation": "The article discusses her notes as containing an early algorithm intended for a machine."
+    },
+    {
+      "question": "What was Lovelace's nationality?",
+      "options": ["English", "Italian", "Canadian", "Japanese"],
+      "answer": "English",
+      "difficulty": "easy",
+      "explanation": "The opening summary describes Ada Lovelace as English."
+    },
+    {
+      "question": "Which subject area is central to Lovelace's historical reputation?",
+      "options": ["Mathematics", "Geology", "Cartography", "Opera"],
+      "answer": "Mathematics",
+      "difficulty": "medium",
+      "explanation": "The article identifies her as a mathematician and describes mathematical work."
+    }
+  ],
+  "related_topics": ["Analytical Engine", "Charles Babbage", "History of computing", "Computer programming"],
+  "created_at": "2026-05-21T10:05:00Z"
+}
+

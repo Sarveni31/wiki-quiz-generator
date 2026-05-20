@@ -1,0 +1,2 @@
+"""Wiki Quiz backend package."""
+

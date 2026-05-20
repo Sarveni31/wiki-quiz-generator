@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Wiki Quiz Generator</title>
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Deepklarity Assignment</p>
+          <h1>Wiki Quiz Generator</h1>
+        </div>
+        <a class="ghost-link" href="/api/health" target="_blank" rel="noreferrer">API</a>
+      </header>
+
+      <nav class="tabs" aria-label="Primary">
+        <button class="tab-button active" data-tab="generate">Generate Quiz</button>
+        <button class="tab-button" data-tab="history">Past Quizzes</button>
+      </nav>
+
+      <section id="generate" class="tab-panel active">
+        <form id="quiz-form" class="url-form">
+          <label for="wiki-url">Wikipedia article URL</label>
+          <div class="input-row">
+            <input
+              id="wiki-url"
+              name="url"
+              type="url"
+              value="https://en.wikipedia.org/wiki/Alan_Turing"
+              placeholder="https://en.wikipedia.org/wiki/Alan_Turing"
+              required
+            >
+            <button type="button" id="preview-button">Preview</button>
+            <button type="submit">Generate Quiz</button>
+          </div>
+        </form>
+
+        <div id="status" class="status" role="status"></div>
+        <section id="preview" class="preview hidden" aria-live="polite"></section>
+        <section id="latest-result" class="result-grid"></section>
+      </section>
+
+      <section id="history" class="tab-panel">
+        <div class="section-heading">
+          <h2>Past Quizzes</h2>
+          <button id="refresh-history">Refresh</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Article</th>
+                <th>URL</th>
+                <th>Questions</th>
+                <th>Created</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="history-body"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <dialog id="details-modal">
+      <div class="modal-head">
+        <h2 id="modal-title">Quiz Details</h2>
+        <button id="close-modal" aria-label="Close details">x</button>
+      </div>
+      <div id="modal-content"></div>
+    </dialog>
+
+    <script src="/app.js"></script>
+  </body>
+</html>
+
