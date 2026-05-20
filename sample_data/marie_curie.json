@@ -1,0 +1,52 @@
+{
+  "id": 3,
+  "url": "https://en.wikipedia.org/wiki/Marie_Curie",
+  "title": "Marie Curie",
+  "summary": "Marie Curie was a Polish and naturalized-French physicist and chemist who conducted pioneering research on radioactivity.",
+  "key_entities": {
+    "people": ["Marie Curie", "Pierre Curie", "Henri Becquerel"],
+    "organizations": ["University of Paris", "Sorbonne"],
+    "locations": ["Poland", "France", "Paris"]
+  },
+  "sections": ["Life", "Research", "Nobel Prizes", "Legacy"],
+  "quiz": [
+    {
+      "question": "Marie Curie is most closely associated with research on what topic?",
+      "options": ["Radioactivity", "Plate tectonics", "Aerodynamics", "Linguistics"],
+      "answer": "Radioactivity",
+      "difficulty": "easy",
+      "explanation": "The article summary describes her pioneering research on radioactivity."
+    },
+    {
+      "question": "Which two scientific fields are associated with Curie's work?",
+      "options": ["Physics and chemistry", "Botany and zoology", "Astronomy and geology", "Economics and statistics"],
+      "answer": "Physics and chemistry",
+      "difficulty": "easy",
+      "explanation": "The article identifies Curie as a physicist and chemist."
+    },
+    {
+      "question": "Which person was both Curie's collaborator and spouse?",
+      "options": ["Pierre Curie", "Albert Einstein", "Niels Bohr", "Louis Pasteur"],
+      "answer": "Pierre Curie",
+      "difficulty": "medium",
+      "explanation": "The article discusses Pierre Curie in connection with Marie Curie's life and research."
+    },
+    {
+      "question": "Curie was born in which country?",
+      "options": ["Poland", "France", "Germany", "Spain"],
+      "answer": "Poland",
+      "difficulty": "medium",
+      "explanation": "The article describes Curie as Polish and later naturalized-French."
+    },
+    {
+      "question": "What major scientific honor is repeatedly associated with Curie?",
+      "options": ["Nobel Prize", "Fields Medal", "Turing Award", "Booker Prize"],
+      "answer": "Nobel Prize",
+      "difficulty": "hard",
+      "explanation": "The article includes a Nobel Prizes section and discusses her awards."
+    }
+  ],
+  "related_topics": ["Radioactivity", "Nobel Prize", "Pierre Curie", "History of physics"],
+  "created_at": "2026-05-21T10:10:00Z"
+}
+

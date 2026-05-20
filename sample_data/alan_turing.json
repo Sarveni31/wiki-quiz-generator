@@ -1,0 +1,52 @@
+{
+  "id": 1,
+  "url": "https://en.wikipedia.org/wiki/Alan_Turing",
+  "title": "Alan Turing",
+  "summary": "Alan Turing was a British mathematician, computer scientist, logician, cryptanalyst, philosopher, and theoretical biologist who made major contributions to theoretical computer science and codebreaking.",
+  "key_entities": {
+    "people": ["Alan Turing", "Alonzo Church", "Max Newman"],
+    "organizations": ["University of Cambridge", "Bletchley Park", "Princeton University"],
+    "locations": ["United Kingdom", "England"]
+  },
+  "sections": ["Early life and education", "Cryptanalysis", "Turing machine", "Legacy"],
+  "quiz": [
+    {
+      "question": "What field did Alan Turing make foundational contributions to?",
+      "options": ["Theoretical computer science", "Marine biology", "Classical sculpture", "Volcanology"],
+      "answer": "Theoretical computer science",
+      "difficulty": "easy",
+      "explanation": "The article identifies Turing as a foundational figure in theoretical computer science."
+    },
+    {
+      "question": "Where did Turing work on wartime codebreaking?",
+      "options": ["Bletchley Park", "Los Alamos", "Bell Labs", "CERN"],
+      "answer": "Bletchley Park",
+      "difficulty": "easy",
+      "explanation": "The cryptanalysis section discusses Turing's work at Bletchley Park."
+    },
+    {
+      "question": "Which concept is closely associated with Turing's model of computation?",
+      "options": ["Turing machine", "Steam turbine", "Periodic table", "Quantum dot"],
+      "answer": "Turing machine",
+      "difficulty": "medium",
+      "explanation": "The article includes a section on the Turing machine as a model of computation."
+    },
+    {
+      "question": "Which university is linked to Turing's education?",
+      "options": ["University of Cambridge", "University of Tokyo", "Sorbonne University", "University of Sydney"],
+      "answer": "University of Cambridge",
+      "difficulty": "medium",
+      "explanation": "The early life and education section mentions his study at Cambridge."
+    },
+    {
+      "question": "Which kind of wartime code is commonly associated with Turing's work?",
+      "options": ["Enigma", "Morse weather code", "Semaphore", "ASCII"],
+      "answer": "Enigma",
+      "difficulty": "hard",
+      "explanation": "The codebreaking discussion connects Turing with efforts against German Enigma messages."
+    }
+  ],
+  "related_topics": ["Cryptography", "Enigma machine", "Computer science history", "Turing machine"],
+  "created_at": "2026-05-21T10:00:00Z"
+}
+
