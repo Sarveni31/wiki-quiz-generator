@@ -46,7 +46,14 @@ docker-compose.yml    Local PostgreSQL
 
 \*Not required if `MOCK_LLM=true`.
 
-Never commit `.env`.
+Never commit `.env` or paste API keys into the repo. Set secrets only in Railway **Variables** or a local `.env` file (gitignored).
+
+## Security
+
+- **Gemini API key:** use `GEMINI_API_KEY` in Railway or local `.env` only — not in source code, JSON, or screenshots.
+- **`.env.example`** contains placeholders only; copy to `.env` locally and fill in your key there.
+- **Production database:** use Railway Postgres `DATABASE_URL`; local `docker-compose.yml` credentials are for development only.
+- If a key was ever exposed, revoke it in [Google AI Studio](https://aistudio.google.com/apikey) and create a new one.
 
 ## Deploy on Railway (production)
 
