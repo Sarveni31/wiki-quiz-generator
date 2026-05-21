@@ -26,6 +26,7 @@ screenshots/             Add required assignment screenshots here
 .github/workflows/       GitHub Pages deployment workflow
 docker-compose.yml       Local PostgreSQL
 .env.example             Environment variable template
+render.yaml              Render deployment blueprint
 ```
 
 ## Local Setup
@@ -139,19 +140,7 @@ The LangChain prompt is defined in `backend/app/llm.py` as `QUIZ_PROMPT_TEMPLATE
 
 ## GitHub Version Control
 
-Use GitHub Desktop because `git` is not currently available in this terminal session.
-
-1. Open GitHub Desktop.
-2. Choose **File > Add local repository**.
-3. Select `C:\Users\venka\OneDrive\Documents\deepKlarity`.
-4. If prompted, create the repository.
-5. Publish it to GitHub as a public repo, suggested name: `wiki-quiz-generator`.
-6. Commit in clear chunks:
-   - `Initial project scaffold`
-   - `Add FastAPI quiz generation backend`
-   - `Add static frontend and history UI`
-   - `Add sample data and README`
-   - `Add GitHub Pages demo workflow`
+Repository: https://github.com/Sarveni31/wiki-quiz-generator
 
 Never commit `.env`.
 
@@ -169,6 +158,30 @@ After publishing the repo:
 
 The Pages demo does not call Gemini, FastAPI, or PostgreSQL. It is only a reviewer-friendly UI preview using saved JSON outputs.
 
+## Full Online Deployment
+
+Use the Render service URL for the fully running app. The FastAPI app serves the real frontend from `frontend/`, calls Gemini, and stores quizzes in PostgreSQL.
+
+1. Create a hosted PostgreSQL database in Neon.
+2. Copy the Neon connection string.
+3. In Render, create a new Blueprint from this GitHub repository. Render will read `render.yaml`.
+4. When Render asks for secret environment variables, set:
+
+   ```text
+   DATABASE_URL=<your Neon PostgreSQL connection string>
+   GEMINI_API_KEY=<your Gemini API key>
+   ```
+
+5. Deploy the service.
+6. Open the Render service URL and test:
+   - Wikipedia article preview
+   - Generate Quiz
+   - Past Quizzes history
+   - Details modal
+   - Take Quiz scoring
+
+The backend accepts standard Neon `postgresql://...` and `postgres://...` connection strings and adapts them to the installed SQLAlchemy psycopg driver automatically.
+
 ## Testing Checklist
 
 - Generate quizzes for at least:
@@ -183,4 +196,3 @@ The Pages demo does not call Gemini, FastAPI, or PostgreSQL. It is only a review
   - generation page
   - history view
   - details modal
-
