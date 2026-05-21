@@ -162,7 +162,7 @@ Repo includes `start.sh`, `build.sh`, `railway.toml`, and root `requirements.txt
 
 1. Create a Railway project from https://github.com/Sarveni31/wiki-quiz-generator.
 2. Add a **PostgreSQL** service and link `DATABASE_URL` to the web service.
-3. Set variables: `GEMINI_API_KEY`, `GEMINI_MODEL=gemini-2.0-flash` (do not use retired `gemini-1.5-flash`), `MOCK_LLM=false`.
+3. Set variables: `GEMINI_API_KEY`, `GEMINI_MODEL=gemini-2.0-flash-lite` (lighter free-tier model; avoid retired `gemini-1.5-flash`), `MOCK_LLM=false`. If you see quota errors, wait and retry or set `MOCK_LLM=true` for a demo without Gemini.
 4. Deploy settings (usually auto-detected from `railway.toml`):
    - **Root directory:** leave **empty** (repo root). If you set `backend`, `start.sh` is missing and the UI may not deploy.
    - **Build:** `pip install -r requirements.txt`

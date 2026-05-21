@@ -93,11 +93,22 @@ def generate_article_payload(article: ScrapedArticle) -> GeneratedPayload:
             errors.append(f"{model_name}: {exc}")
 
     if response is None:
+        combined = " | ".join(errors)
+        if "429" in combined or "quota" in combined.lower():
+            raise HTTPException(
+                status_code=429,
+                detail=(
+                    "Gemini free-tier quota exceeded for this API key. Wait a few minutes and retry, "
+                    "create a new key at https://aistudio.google.com/apikey, check usage at "
+                    "https://ai.dev/rate-limit, or set MOCK_LLM=true on Railway to demo without Gemini. "
+                    f"Tried: {', '.join(models_to_try)}."
+                ),
+            )
         raise HTTPException(
             status_code=502,
             detail=(
                 f"Gemini API call failed for all tried models ({', '.join(models_to_try)}). "
-                f"Set GEMINI_MODEL=gemini-2.0-flash on Railway. Errors: {' | '.join(errors)}"
+                f"Set GEMINI_MODEL=gemini-2.0-flash-lite on Railway. Errors: {combined}"
             ),
         )
 

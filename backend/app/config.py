@@ -4,15 +4,19 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 # Google retired some v1beta model IDs; map old env values to current names.
 DEPRECATED_GEMINI_MODEL_ALIASES: dict[str, str] = {
-    "gemini-1.5-flash": "gemini-2.0-flash",
-    "gemini-1.5-flash-latest": "gemini-2.0-flash",
-    "gemini-1.5-pro": "gemini-2.0-flash",
-    "gemini-1.5-pro-latest": "gemini-2.0-flash",
+    "gemini-1.5-flash": "gemini-2.0-flash-lite",
+    "gemini-1.5-flash-latest": "gemini-2.0-flash-lite",
+    "gemini-1.5-pro": "gemini-2.0-flash-lite",
+    "gemini-1.5-pro-latest": "gemini-2.0-flash-lite",
+    "gemini-2.0-flash": "gemini-2.0-flash-lite",
+    "gemini-2.5-flash-preview-05-20": "gemini-2.5-flash",
 }
 
+# Valid public model IDs (avoid preview IDs that 404 on v1beta).
 GEMINI_MODEL_FALLBACKS: tuple[str, ...] = (
-    "gemini-2.0-flash",
-    "gemini-2.5-flash-preview-05-20",
+    "gemini-2.0-flash-lite",
+    "gemini-2.5-flash",
+    "gemini-1.5-flash-8b",
 )
 
 
@@ -20,7 +24,7 @@ class Settings(BaseSettings):
     app_name: str = "Wiki Quiz Generator"
     database_url: str = "postgresql+psycopg://wikiquiz:wikiquiz@localhost:5432/wikiquiz"
     gemini_api_key: str = ""
-    gemini_model: str = "gemini-2.0-flash"
+    gemini_model: str = "gemini-2.0-flash-lite"
     mock_llm: bool = False
     request_timeout_seconds: int = 20
 
