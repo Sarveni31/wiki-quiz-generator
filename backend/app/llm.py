@@ -75,13 +75,19 @@ def generate_article_payload(article: ScrapedArticle) -> GeneratedPayload:
         google_api_key=settings.gemini_api_key,
         temperature=0.2,
     )
-    response = (prompt | model).invoke(
-        {
-            "title": article.title,
-            "sections": ", ".join(article.sections[:10]),
-            "article_text": article.text,
-        }
-    )
+    try:
+        response = (prompt | model).invoke(
+            {
+                "title": article.title,
+                "sections": ", ".join(article.sections[:10]),
+                "article_text": article.text,
+            }
+        )
+    except Exception as exc:
+        raise HTTPException(
+            status_code=502,
+            detail=f"Gemini API call failed ({settings.gemini_model}). Check GEMINI_API_KEY and model name. {exc}",
+        ) from exc
 
     raw = getattr(response, "content", str(response))
     data = parse_json_response(raw)

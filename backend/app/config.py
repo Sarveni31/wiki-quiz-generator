@@ -7,7 +7,7 @@ class Settings(BaseSettings):
     app_name: str = "Wiki Quiz Generator"
     database_url: str = "postgresql+psycopg://wikiquiz:wikiquiz@localhost:5432/wikiquiz"
     gemini_api_key: str = ""
-    gemini_model: str = "gemini-1.5-flash"
+    gemini_model: str = "gemini-2.0-flash"
     mock_llm: bool = False
     request_timeout_seconds: int = 20
 

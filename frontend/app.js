@@ -252,7 +252,11 @@ async function readJson(response) {
     const detail = data.detail;
     const message = Array.isArray(detail)
       ? detail.map((item) => item.msg || JSON.stringify(item)).join(" ")
-      : detail || "Request failed.";
+      : typeof detail === "string"
+        ? detail
+        : detail
+          ? JSON.stringify(detail)
+          : "Request failed.";
     throw new Error(message);
   }
   return data;
