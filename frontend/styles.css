@@ -246,6 +246,28 @@ input {
   font-weight: 700;
 }
 
+.quiz-section-group {
+  margin-top: 24px;
+}
+
+.quiz-section-title {
+  margin: 0 0 12px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--accent);
+  color: var(--accent-strong);
+  font-size: 1.1rem;
+}
+
+.answer-details {
+  margin-top: 10px;
+}
+
+.answer-details summary {
+  cursor: pointer;
+  color: var(--muted);
+  font-weight: 600;
+}
+
 .table-wrap {
   margin-top: 16px;
   overflow-x: auto;

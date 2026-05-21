@@ -1,5 +1,6 @@
 const state = {
   latestQuiz: null,
+  previewTimer: null,
 };
 
 const qs = (selector) => document.querySelector(selector);
@@ -29,33 +30,55 @@ qs("#quiz-form").addEventListener("submit", async (event) => {
     });
     const data = await readJson(response);
     state.latestQuiz = data;
-    setStatus(`Generated quiz for ${data.title}.`);
+    setStatus(
+      data.cached
+        ? `Loaded cached quiz for ${data.title} (skipped scraping and generation).`
+        : `Generated quiz for ${data.title}.`
+    );
     renderQuiz(data, qs("#latest-result"), { includeTakeMode: true });
   } catch (error) {
     setStatus(error.message, true);
   }
 });
 
-qs("#preview-button").addEventListener("click", async () => {
-  const url = qs("#wiki-url").value.trim();
-  setStatus("Fetching article preview.");
-  try {
-    const response = await fetch(`/api/articles/preview?url=${encodeURIComponent(url)}`);
-    const data = await readJson(response);
-    qs("#preview").classList.remove("hidden");
-    qs("#preview").innerHTML = `
-      <h2>${escapeHtml(data.title)}</h2>
-      <p>${escapeHtml(data.summary)}</p>
-      <ul class="meta-list">${data.sections.slice(0, 8).map((section) => `<li class="pill">${escapeHtml(section)}</li>`).join("")}</ul>
-    `;
-    setStatus("Preview loaded.");
-  } catch (error) {
-    setStatus(error.message, true);
-  }
+qs("#preview-button").addEventListener("click", () => loadPreview(false));
+
+qs("#wiki-url").addEventListener("input", () => {
+  clearTimeout(state.previewTimer);
+  state.previewTimer = setTimeout(() => loadPreview(true), 450);
 });
 
 qs("#refresh-history").addEventListener("click", loadHistory);
 qs("#close-modal").addEventListener("click", () => qs("#details-modal").close());
+
+async function loadPreview(isAuto) {
+  const url = qs("#wiki-url").value.trim();
+  if (!looksLikeWikiUrl(url)) {
+    qs("#preview").classList.add("hidden");
+    if (!isAuto) setStatus("Enter a valid HTTPS Wikipedia article URL.", true);
+    return;
+  }
+
+  if (!isAuto) setStatus("Fetching article preview.");
+  try {
+    const response = await fetch(`/api/articles/preview?url=${encodeURIComponent(url)}`);
+    const data = await readJson(response);
+    renderPreview(data);
+    setStatus(isAuto ? `Preview: ${data.title}` : "Preview loaded.");
+  } catch (error) {
+    qs("#preview").classList.add("hidden");
+    if (!isAuto) setStatus(error.message, true);
+  }
+}
+
+function renderPreview(data) {
+  qs("#preview").classList.remove("hidden");
+  qs("#preview").innerHTML = `
+    <h2>${escapeHtml(data.title)}</h2>
+    <p>${escapeHtml(data.summary)}</p>
+    <ul class="meta-list">${data.sections.slice(0, 8).map((section) => `<li class="pill">${escapeHtml(section)}</li>`).join("")}</ul>
+  `;
+}
 
 async function loadHistory() {
   const body = qs("#history-body");
@@ -96,7 +119,46 @@ async function openDetails(id) {
   }
 }
 
+function groupQuestionsBySection(quiz, articleSections = []) {
+  const buckets = new Map();
+  for (const item of quiz) {
+    const key = item.section || "General";
+    if (!buckets.has(key)) buckets.set(key, []);
+    buckets.get(key).push(item);
+  }
+
+  const order = [];
+  for (const section of articleSections) {
+    if (buckets.has(section)) order.push(section);
+  }
+  if (buckets.has("General") && !order.includes("General")) order.push("General");
+  for (const section of buckets.keys()) {
+    if (!order.includes(section)) order.push(section);
+  }
+
+  return order.map((section) => ({ section, questions: buckets.get(section) }));
+}
+
 function renderQuiz(data, container, options = {}) {
+  const groups = groupQuestionsBySection(data.quiz, data.sections);
+  let questionNumber = 0;
+  const groupedCards = groups
+    .map(({ section, questions }) => {
+      const cards = questions
+        .map((item) => {
+          questionNumber += 1;
+          return renderQuestionCard(item, questionNumber);
+        })
+        .join("");
+      return `
+        <section class="quiz-section-group">
+          <h3 class="quiz-section-title">${escapeHtml(section)}</h3>
+          ${cards}
+        </section>
+      `;
+    })
+    .join("");
+
   container.innerHTML = `
     <article class="article-summary">
       <h2>${escapeHtml(data.title)}</h2>
@@ -108,7 +170,7 @@ function renderQuiz(data, container, options = {}) {
       </ul>
       <ul class="topics">${data.related_topics.map((topic) => `<li class="pill">${escapeHtml(topic)}</li>`).join("")}</ul>
     </article>
-    ${data.quiz.map((item, index) => renderQuestionCard(item, index)).join("")}
+    ${groupedCards}
     ${options.includeTakeMode ? renderTakeQuiz(data.quiz) : ""}
   `;
   const submit = container.querySelector("[data-submit-quiz]");
@@ -123,14 +185,17 @@ function renderQuestionCard(item, index) {
   return `
     <article class="quiz-card">
       <div class="section-heading">
-        <h3>${index + 1}. ${escapeHtml(item.question)}</h3>
+        <h4>${index}. ${escapeHtml(item.question)}</h4>
         <span class="difficulty">${escapeHtml(item.difficulty)}</span>
       </div>
       <div class="options">
         ${item.options.map((option, optionIndex) => `<div class="option">${String.fromCharCode(65 + optionIndex)}. ${escapeHtml(option)}</div>`).join("")}
       </div>
-      <p class="answer">Answer: ${escapeHtml(item.answer)}</p>
-      <p>${escapeHtml(item.explanation)}</p>
+      <details class="answer-details">
+        <summary>Show answer</summary>
+        <p class="answer">Answer: ${escapeHtml(item.answer)}</p>
+        <p>${escapeHtml(item.explanation)}</p>
+      </details>
     </article>
   `;
 }
@@ -167,10 +232,28 @@ function scoreQuiz(container, quiz) {
   container.querySelector(".score").textContent = `Score: ${score} / ${quiz.length}`;
 }
 
+function looksLikeWikiUrl(url) {
+  try {
+    const parsed = new URL(url);
+    return (
+      parsed.protocol === "https:" &&
+      parsed.hostname.endsWith(".wikipedia.org") &&
+      parsed.pathname.startsWith("/wiki/") &&
+      !parsed.pathname.includes(":")
+    );
+  } catch {
+    return false;
+  }
+}
+
 async function readJson(response) {
   const data = await response.json().catch(() => ({}));
   if (!response.ok) {
-    throw new Error(data.detail || "Request failed.");
+    const detail = data.detail;
+    const message = Array.isArray(detail)
+      ? detail.map((item) => item.msg || JSON.stringify(item)).join(" ")
+      : detail || "Request failed.";
+    throw new Error(message);
   }
   return data;
 }
@@ -194,3 +277,6 @@ function escapeHtml(value) {
     .replaceAll("'", "&#039;");
 }
 
+if (looksLikeWikiUrl(qs("#wiki-url").value.trim())) {
+  loadPreview(true);
+}

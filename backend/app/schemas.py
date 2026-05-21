@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Literal
 
-from pydantic import BaseModel, Field, HttpUrl, field_validator
+from pydantic import BaseModel, Field, HttpUrl, field_validator, model_validator
 
 
 class GenerateQuizRequest(BaseModel):
@@ -20,6 +20,7 @@ class QuizQuestion(BaseModel):
     answer: str
     difficulty: Literal["easy", "medium", "hard"]
     explanation: str
+    section: str | None = None
 
     @field_validator("answer")
     @classmethod
@@ -27,6 +28,12 @@ class QuizQuestion(BaseModel):
         if not value.strip():
             raise ValueError("answer cannot be empty")
         return value
+
+    @model_validator(mode="after")
+    def answer_must_match_option(self) -> "QuizQuestion":
+        if self.answer not in self.options:
+            raise ValueError("answer must exactly match one of the options")
+        return self
 
 
 class GeneratedPayload(BaseModel):
@@ -46,6 +53,7 @@ class QuizResponse(BaseModel):
     quiz: list[QuizQuestion]
     related_topics: list[str]
     created_at: datetime
+    cached: bool = False
 
 
 class QuizListItem(BaseModel):

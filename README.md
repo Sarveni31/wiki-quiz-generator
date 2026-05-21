@@ -100,6 +100,32 @@ Example generate request:
 }
 ```
 
+## Bonus Features (Assignment)
+
+| Feature | Implementation |
+|---------|----------------|
+| Take Quiz + scoring | `frontend/app.js` — radio answers hidden until Submit; score shown as `X / N` |
+| URL validation + auto-preview | `backend/app/scraper.py` validates Wikipedia URLs; typing a valid URL auto-loads title/sections via `GET /api/articles/preview` (Preview button still works) |
+| Raw HTML stored | `quizzes.raw_html` column in PostgreSQL (set on generate, not returned in API JSON) |
+| URL caching | `POST /api/quizzes/generate` checks the database before scraping; response includes `"cached": true` when reusing a stored quiz |
+| Section-wise grouping | Each question has a `section` field; UI groups cards under section headings |
+
+Verify raw HTML in Postgres:
+
+```sql
+SELECT id, title, length(raw_html) AS html_chars FROM quizzes;
+```
+
+## Assignment Compliance
+
+Submission checklist:
+
+- [x] FastAPI backend + PostgreSQL + BeautifulSoup + LangChain/Gemini
+- [x] Two-tab frontend (Generate Quiz, Past Quizzes + Details modal)
+- [x] `sample_data/` with example URLs and JSON outputs
+- [x] README with setup, endpoints, prompt template reference
+- [ ] `screenshots/` — add three PNGs (see `screenshots/README.md`)
+
 ## Prompt Template
 
 The LangChain prompt is defined in `backend/app/llm.py` as `QUIZ_PROMPT_TEMPLATE`. It instructs Gemini to:
@@ -107,7 +133,7 @@ The LangChain prompt is defined in `backend/app/llm.py` as `QUIZ_PROMPT_TEMPLATE
 - Use only the supplied article text.
 - Return strict JSON.
 - Generate 5 to 10 questions.
-- Include four options, one exact answer, difficulty, and explanation.
+- Include four options, one exact answer that matches an option exactly, difficulty, explanation, and section.
 - Suggest related Wikipedia topics.
 - Avoid unsupported facts.
 

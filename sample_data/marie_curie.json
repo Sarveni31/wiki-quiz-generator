@@ -15,35 +15,40 @@
       "options": ["Radioactivity", "Plate tectonics", "Aerodynamics", "Linguistics"],
       "answer": "Radioactivity",
       "difficulty": "easy",
-      "explanation": "The article summary describes her pioneering research on radioactivity."
+      "explanation": "The article summary describes her pioneering research on radioactivity.",
+      "section": "Research"
     },
     {
       "question": "Which two scientific fields are associated with Curie's work?",
       "options": ["Physics and chemistry", "Botany and zoology", "Astronomy and geology", "Economics and statistics"],
       "answer": "Physics and chemistry",
       "difficulty": "easy",
-      "explanation": "The article identifies Curie as a physicist and chemist."
+      "explanation": "The article identifies Curie as a physicist and chemist.",
+      "section": "Research"
     },
     {
       "question": "Which person was both Curie's collaborator and spouse?",
       "options": ["Pierre Curie", "Albert Einstein", "Niels Bohr", "Louis Pasteur"],
       "answer": "Pierre Curie",
       "difficulty": "medium",
-      "explanation": "The article discusses Pierre Curie in connection with Marie Curie's life and research."
+      "explanation": "The article discusses Pierre Curie in connection with Marie Curie's life and research.",
+      "section": "Life"
     },
     {
       "question": "Curie was born in which country?",
       "options": ["Poland", "France", "Germany", "Spain"],
       "answer": "Poland",
       "difficulty": "medium",
-      "explanation": "The article describes Curie as Polish and later naturalized-French."
+      "explanation": "The article describes Curie as Polish and later naturalized-French.",
+      "section": "Life"
     },
     {
       "question": "What major scientific honor is repeatedly associated with Curie?",
       "options": ["Nobel Prize", "Fields Medal", "Turing Award", "Booker Prize"],
       "answer": "Nobel Prize",
       "difficulty": "hard",
-      "explanation": "The article includes a Nobel Prizes section and discusses her awards."
+      "explanation": "The article includes a Nobel Prizes section and discusses her awards.",
+      "section": "Nobel Prizes"
     }
   ],
   "related_topics": ["Radioactivity", "Nobel Prize", "Pierre Curie", "History of physics"],

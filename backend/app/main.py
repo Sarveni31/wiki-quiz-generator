@@ -10,7 +10,7 @@ from .database import get_db, init_db
 from .llm import generate_article_payload
 from .models import QuizRecord
 from .schemas import ArticlePreview, GenerateQuizRequest, QuizListItem, QuizResponse
-from .scraper import scrape_article
+from .scraper import normalize_wikipedia_url, scrape_article
 
 ROOT_DIR = Path(__file__).resolve().parents[2]
 FRONTEND_DIR = ROOT_DIR / "frontend"
@@ -30,7 +30,7 @@ def on_startup() -> None:
     init_db()
 
 
-def to_response(record: QuizRecord) -> QuizResponse:
+def to_response(record: QuizRecord, *, cached: bool = False) -> QuizResponse:
     return QuizResponse(
         id=record.id,
         url=record.url,
@@ -41,6 +41,7 @@ def to_response(record: QuizRecord) -> QuizResponse:
         quiz=record.quiz,
         related_topics=record.related_topics,
         created_at=record.created_at,
+        cached=cached,
     )
 
 
@@ -62,13 +63,12 @@ def preview_article(url: str) -> ArticlePreview:
 
 @app.post("/api/quizzes/generate", response_model=QuizResponse)
 def generate_quiz(payload: GenerateQuizRequest, db: Session = Depends(get_db)) -> QuizResponse:
-    url = str(payload.url)
-    article = scrape_article(url)
-
-    existing = db.scalar(select(QuizRecord).where(QuizRecord.url == article.url))
+    normalized_url = normalize_wikipedia_url(str(payload.url))
+    existing = db.scalar(select(QuizRecord).where(QuizRecord.url == normalized_url))
     if existing:
-        return to_response(existing)
+        return to_response(existing, cached=True)
 
+    article = scrape_article(str(payload.url))
     generated = generate_article_payload(article)
     record = QuizRecord(
         url=article.url,
@@ -83,7 +83,7 @@ def generate_quiz(payload: GenerateQuizRequest, db: Session = Depends(get_db)) -
     db.add(record)
     db.commit()
     db.refresh(record)
-    return to_response(record)
+    return to_response(record, cached=False)
 
 
 @app.get("/api/quizzes", response_model=list[QuizListItem])

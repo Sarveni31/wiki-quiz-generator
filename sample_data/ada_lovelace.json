@@ -15,35 +15,40 @@
       "options": ["Analytical Engine", "Difference Telescope", "Jacquard Locomotive", "Steam Microscope"],
       "answer": "Analytical Engine",
       "difficulty": "easy",
-      "explanation": "The article connects Lovelace's most famous work with Babbage's Analytical Engine."
+      "explanation": "The article connects Lovelace's most famous work with Babbage's Analytical Engine.",
+      "section": "Analytical Engine"
     },
     {
       "question": "Who designed the machine Lovelace wrote notes about?",
       "options": ["Charles Babbage", "Isaac Newton", "Alan Turing", "Michael Faraday"],
       "answer": "Charles Babbage",
       "difficulty": "easy",
-      "explanation": "The Analytical Engine section names Charles Babbage as its designer."
+      "explanation": "The Analytical Engine section names Charles Babbage as its designer.",
+      "section": "Analytical Engine"
     },
     {
       "question": "What type of work is Lovelace often credited with writing?",
       "options": ["An early computer program", "A chemical equation", "A legal code", "A railway timetable"],
       "answer": "An early computer program",
       "difficulty": "medium",
-      "explanation": "The article discusses her notes as containing an early algorithm intended for a machine."
+      "explanation": "The article discusses her notes as containing an early algorithm intended for a machine.",
+      "section": "First computer program"
     },
     {
       "question": "What was Lovelace's nationality?",
       "options": ["English", "Italian", "Canadian", "Japanese"],
       "answer": "English",
       "difficulty": "easy",
-      "explanation": "The opening summary describes Ada Lovelace as English."
+      "explanation": "The opening summary describes Ada Lovelace as English.",
+      "section": "Biography"
     },
     {
       "question": "Which subject area is central to Lovelace's historical reputation?",
       "options": ["Mathematics", "Geology", "Cartography", "Opera"],
       "answer": "Mathematics",
       "difficulty": "medium",
-      "explanation": "The article identifies her as a mathematician and describes mathematical work."
+      "explanation": "The article identifies her as a mathematician and describes mathematical work.",
+      "section": "Legacy"
     }
   ],
   "related_topics": ["Analytical Engine", "Charles Babbage", "History of computing", "Computer programming"],

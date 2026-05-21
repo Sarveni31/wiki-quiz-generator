@@ -18,7 +18,9 @@ Rules:
 - Return strict JSON only. Do not wrap it in markdown.
 - Generate 5 to 10 multiple-choice questions.
 - Each question must have exactly four options.
-- The answer must exactly match one option.
+- The answer must exactly match one option string in options.
+- Each question must include a section field using one of the Article sections above, or "General" if none fits.
+- Do not invent section names beyond the provided headings and "General".
 - Difficulty must be one of: easy, medium, hard.
 - Explanations must cite where the answer appears in the article in plain language.
 - Include related Wikipedia topics for further reading.
@@ -43,7 +45,8 @@ Return this JSON shape:
       "options": ["A", "B", "C", "D"],
       "answer": "one exact option",
       "difficulty": "easy",
-      "explanation": "short explanation"
+      "explanation": "short explanation",
+      "section": "section heading from article"
     }}
   ],
   "related_topics": []
@@ -113,6 +116,7 @@ def mock_payload(article: ScrapedArticle) -> GeneratedPayload:
         "An unrelated invention",
         "A random location",
     ]
+    section_names = article.sections or ["General"]
     quiz = [
         {
             "question": f"What is the main topic of the article '{article.title}'?",
@@ -120,8 +124,9 @@ def mock_payload(article: ScrapedArticle) -> GeneratedPayload:
             "answer": article.title,
             "difficulty": "easy",
             "explanation": "The article title and opening summary identify the main topic.",
+            "section": section_names[index % len(section_names)],
         }
-        for _ in range(5)
+        for index in range(5)
     ]
     return GeneratedPayload.model_validate(
         {
