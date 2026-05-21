@@ -5,7 +5,7 @@ from fastapi import HTTPException
 from langchain_core.prompts import ChatPromptTemplate
 from pydantic import ValidationError
 
-from .config import get_settings
+from .config import gemini_models_to_try, get_settings
 from .schemas import GeneratedPayload
 from .scraper import ScrapedArticle
 
@@ -70,24 +70,36 @@ def generate_article_payload(article: ScrapedArticle) -> GeneratedPayload:
         raise HTTPException(status_code=500, detail="LangChain Gemini dependency is not installed.") from exc
 
     prompt = ChatPromptTemplate.from_template(QUIZ_PROMPT_TEMPLATE)
-    model = ChatGoogleGenerativeAI(
-        model=settings.gemini_model,
-        google_api_key=settings.gemini_api_key,
-        temperature=0.2,
-    )
-    try:
-        response = (prompt | model).invoke(
-            {
-                "title": article.title,
-                "sections": ", ".join(article.sections[:10]),
-                "article_text": article.text,
-            }
+    invoke_input = {
+        "title": article.title,
+        "sections": ", ".join(article.sections[:10]),
+        "article_text": article.text,
+    }
+
+    models_to_try = gemini_models_to_try(settings.gemini_model)
+    response = None
+    errors: list[str] = []
+
+    for model_name in models_to_try:
+        model = ChatGoogleGenerativeAI(
+            model=model_name,
+            google_api_key=settings.gemini_api_key,
+            temperature=0.2,
         )
-    except Exception as exc:
+        try:
+            response = (prompt | model).invoke(invoke_input)
+            break
+        except Exception as exc:
+            errors.append(f"{model_name}: {exc}")
+
+    if response is None:
         raise HTTPException(
             status_code=502,
-            detail=f"Gemini API call failed ({settings.gemini_model}). Check GEMINI_API_KEY and model name. {exc}",
-        ) from exc
+            detail=(
+                f"Gemini API call failed for all tried models ({', '.join(models_to_try)}). "
+                f"Set GEMINI_MODEL=gemini-2.0-flash on Railway. Errors: {' | '.join(errors)}"
+            ),
+        )
 
     raw = getattr(response, "content", str(response))
     data = parse_json_response(raw)
