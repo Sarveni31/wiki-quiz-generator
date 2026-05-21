@@ -138,7 +138,7 @@ No backend on Pages — use Railway for the live app.
 
 ## Submission checklist
 
-- [x] Backend, frontend, `sample_data/`, README, prompt in `llm.py`
+- [x] Backend, frontend, `sample_data/` (including `quiz_outputs.json`), README, prompt in `llm.py`
 - [x] Railway deployment documented
 - [ ] Three screenshots in `screenshots/` (see `screenshots/README.md`)
 
