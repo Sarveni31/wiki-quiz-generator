@@ -29,6 +29,8 @@ This project is ready to publish with GitHub Desktop.
 
 The Pages site is a static demo. The real app runs locally with FastAPI, Gemini, and PostgreSQL.
 
+For a full online app, create a Neon PostgreSQL database and a Render Blueprint from this GitHub repository. The `render.yaml` file contains the Render build and start commands; Render will ask for `DATABASE_URL` and `GEMINI_API_KEY`.
+
 ## 3. Run Locally
 
 1. Install Docker Desktop and Python 3.11+.
@@ -49,4 +51,3 @@ The Pages site is a static demo. The real app runs locally with FastAPI, Gemini,
    ```text
    http://127.0.0.1:8000
    ```
-

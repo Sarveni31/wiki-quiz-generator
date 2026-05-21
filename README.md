@@ -143,6 +143,30 @@ After publishing the repo:
 
 The Pages demo does not call Gemini, FastAPI, or PostgreSQL. It is only a reviewer-friendly UI preview using saved JSON outputs.
 
+## Full Online Deployment
+
+Use the Render service URL for the fully running app. The FastAPI app serves the real frontend from `frontend/`, calls Gemini, and stores quizzes in PostgreSQL.
+
+1. Create a hosted PostgreSQL database in Neon.
+2. Copy the Neon connection string.
+3. In Render, create a new Blueprint from this GitHub repository. Render will read `render.yaml`.
+4. When Render asks for secret environment variables, set:
+
+   ```text
+   DATABASE_URL=<your Neon PostgreSQL connection string>
+   GEMINI_API_KEY=<your Gemini API key>
+   ```
+
+5. Deploy the service.
+6. Open the Render service URL and test:
+   - Wikipedia article preview
+   - Generate Quiz
+   - Past Quizzes history
+   - Details modal
+   - Take Quiz scoring
+
+The backend accepts standard Neon `postgresql://...` and `postgres://...` connection strings and adapts them to the installed SQLAlchemy psycopg driver automatically.
+
 ## Testing Checklist
 
 - Generate quizzes for at least:
@@ -157,4 +181,3 @@ The Pages demo does not call Gemini, FastAPI, or PostgreSQL. It is only a review
   - generation page
   - history view
   - details modal
-
