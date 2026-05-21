@@ -26,7 +26,7 @@ Full-stack app that turns a Wikipedia article URL into a grounded multiple-choic
 backend/app/          API, scraper, LLM, database models
 frontend/             UI served by FastAPI at /
 docs/                 Static GitHub Pages demo
-sample_data/          Example URLs and JSON outputs
+sample_data/          Example URLs and JSON outputs (`quiz_outputs.json` = all quizzes in one file)
 screenshots/          Assignment screenshots (see screenshots/README.md)
 railway.toml          Railway deploy config
 requirements.txt      Python dependencies (repo root)

@@ -1,0 +1,313 @@
+{
+  "urls_tested": [
+    "https://en.wikipedia.org/wiki/Alan_Turing",
+    "https://en.wikipedia.org/wiki/Ada_Lovelace",
+    "https://en.wikipedia.org/wiki/Marie_Curie"
+  ],
+  "quizzes": [
+    {
+      "id": 1,
+      "url": "https://en.wikipedia.org/wiki/Alan_Turing",
+      "title": "Alan Turing",
+      "summary": "Alan Turing was a British mathematician, computer scientist, logician, cryptanalyst, philosopher, and theoretical biologist who made major contributions to theoretical computer science and codebreaking.",
+      "key_entities": {
+        "people": [
+          "Alan Turing",
+          "Alonzo Church",
+          "Max Newman"
+        ],
+        "organizations": [
+          "University of Cambridge",
+          "Bletchley Park",
+          "Princeton University"
+        ],
+        "locations": [
+          "United Kingdom",
+          "England"
+        ]
+      },
+      "sections": [
+        "Early life and education",
+        "Cryptanalysis",
+        "Turing machine",
+        "Legacy"
+      ],
+      "quiz": [
+        {
+          "question": "What field did Alan Turing make foundational contributions to?",
+          "options": [
+            "Theoretical computer science",
+            "Marine biology",
+            "Classical sculpture",
+            "Volcanology"
+          ],
+          "answer": "Theoretical computer science",
+          "difficulty": "easy",
+          "explanation": "The article identifies Turing as a foundational figure in theoretical computer science.",
+          "section": "Legacy"
+        },
+        {
+          "question": "Where did Turing work on wartime codebreaking?",
+          "options": [
+            "Bletchley Park",
+            "Los Alamos",
+            "Bell Labs",
+            "CERN"
+          ],
+          "answer": "Bletchley Park",
+          "difficulty": "easy",
+          "explanation": "The cryptanalysis section discusses Turing's work at Bletchley Park.",
+          "section": "Cryptanalysis"
+        },
+        {
+          "question": "Which concept is closely associated with Turing's model of computation?",
+          "options": [
+            "Turing machine",
+            "Steam turbine",
+            "Periodic table",
+            "Quantum dot"
+          ],
+          "answer": "Turing machine",
+          "difficulty": "medium",
+          "explanation": "The article includes a section on the Turing machine as a model of computation.",
+          "section": "Turing machine"
+        },
+        {
+          "question": "Which university is linked to Turing's education?",
+          "options": [
+            "University of Cambridge",
+            "University of Tokyo",
+            "Sorbonne University",
+            "University of Sydney"
+          ],
+          "answer": "University of Cambridge",
+          "difficulty": "medium",
+          "explanation": "The early life and education section mentions his study at Cambridge.",
+          "section": "Early life and education"
+        },
+        {
+          "question": "Which kind of wartime code is commonly associated with Turing's work?",
+          "options": [
+            "Enigma",
+            "Morse weather code",
+            "Semaphore",
+            "ASCII"
+          ],
+          "answer": "Enigma",
+          "difficulty": "hard",
+          "explanation": "The codebreaking discussion connects Turing with efforts against German Enigma messages.",
+          "section": "Cryptanalysis"
+        }
+      ],
+      "related_topics": [
+        "Cryptography",
+        "Enigma machine",
+        "Computer science history",
+        "Turing machine"
+      ],
+      "created_at": "2026-05-21T10:00:00Z"
+    },
+    {
+      "id": 2,
+      "url": "https://en.wikipedia.org/wiki/Ada_Lovelace",
+      "title": "Ada Lovelace",
+      "summary": "Ada Lovelace was an English mathematician and writer known for her work on Charles Babbage's proposed Analytical Engine.",
+      "key_entities": {
+        "people": [
+          "Ada Lovelace",
+          "Charles Babbage",
+          "Lord Byron"
+        ],
+        "organizations": [
+          "University of London"
+        ],
+        "locations": [
+          "England",
+          "London"
+        ]
+      },
+      "sections": [
+        "Biography",
+        "Analytical Engine",
+        "First computer program",
+        "Legacy"
+      ],
+      "quiz": [
+        {
+          "question": "Ada Lovelace is best known for work connected to which machine?",
+          "options": [
+            "Analytical Engine",
+            "Difference Telescope",
+            "Jacquard Locomotive",
+            "Steam Microscope"
+          ],
+          "answer": "Analytical Engine",
+          "difficulty": "easy",
+          "explanation": "The article connects Lovelace's most famous work with Babbage's Analytical Engine.",
+          "section": "Analytical Engine"
+        },
+        {
+          "question": "Who designed the machine Lovelace wrote notes about?",
+          "options": [
+            "Charles Babbage",
+            "Isaac Newton",
+            "Alan Turing",
+            "Michael Faraday"
+          ],
+          "answer": "Charles Babbage",
+          "difficulty": "easy",
+          "explanation": "The Analytical Engine section names Charles Babbage as its designer.",
+          "section": "Analytical Engine"
+        },
+        {
+          "question": "What type of work is Lovelace often credited with writing?",
+          "options": [
+            "An early computer program",
+            "A chemical equation",
+            "A legal code",
+            "A railway timetable"
+          ],
+          "answer": "An early computer program",
+          "difficulty": "medium",
+          "explanation": "The article discusses her notes as containing an early algorithm intended for a machine.",
+          "section": "First computer program"
+        },
+        {
+          "question": "What was Lovelace's nationality?",
+          "options": [
+            "English",
+            "Italian",
+            "Canadian",
+            "Japanese"
+          ],
+          "answer": "English",
+          "difficulty": "easy",
+          "explanation": "The opening summary describes Ada Lovelace as English.",
+          "section": "Biography"
+        },
+        {
+          "question": "Which subject area is central to Lovelace's historical reputation?",
+          "options": [
+            "Mathematics",
+            "Geology",
+            "Cartography",
+            "Opera"
+          ],
+          "answer": "Mathematics",
+          "difficulty": "medium",
+          "explanation": "The article identifies her as a mathematician and describes mathematical work.",
+          "section": "Legacy"
+        }
+      ],
+      "related_topics": [
+        "Analytical Engine",
+        "Charles Babbage",
+        "History of computing",
+        "Computer programming"
+      ],
+      "created_at": "2026-05-21T10:05:00Z"
+    },
+    {
+      "id": 3,
+      "url": "https://en.wikipedia.org/wiki/Marie_Curie",
+      "title": "Marie Curie",
+      "summary": "Marie Curie was a Polish and naturalized-French physicist and chemist who conducted pioneering research on radioactivity.",
+      "key_entities": {
+        "people": [
+          "Marie Curie",
+          "Pierre Curie",
+          "Henri Becquerel"
+        ],
+        "organizations": [
+          "University of Paris",
+          "Sorbonne"
+        ],
+        "locations": [
+          "Poland",
+          "France",
+          "Paris"
+        ]
+      },
+      "sections": [
+        "Life",
+        "Research",
+        "Nobel Prizes",
+        "Legacy"
+      ],
+      "quiz": [
+        {
+          "question": "Marie Curie is most closely associated with research on what topic?",
+          "options": [
+            "Radioactivity",
+            "Plate tectonics",
+            "Aerodynamics",
+            "Linguistics"
+          ],
+          "answer": "Radioactivity",
+          "difficulty": "easy",
+          "explanation": "The article summary describes her pioneering research on radioactivity.",
+          "section": "Research"
+        },
+        {
+          "question": "Which two scientific fields are associated with Curie's work?",
+          "options": [
+            "Physics and chemistry",
+            "Botany and zoology",
+            "Astronomy and geology",
+            "Economics and statistics"
+          ],
+          "answer": "Physics and chemistry",
+          "difficulty": "easy",
+          "explanation": "The article identifies Curie as a physicist and chemist.",
+          "section": "Research"
+        },
+        {
+          "question": "Which person was both Curie's collaborator and spouse?",
+          "options": [
+            "Pierre Curie",
+            "Albert Einstein",
+            "Niels Bohr",
+            "Louis Pasteur"
+          ],
+          "answer": "Pierre Curie",
+          "difficulty": "medium",
+          "explanation": "The article discusses Pierre Curie in connection with Marie Curie's life and research.",
+          "section": "Life"
+        },
+        {
+          "question": "Curie was born in which country?",
+          "options": [
+            "Poland",
+            "France",
+            "Germany",
+            "Spain"
+          ],
+          "answer": "Poland",
+          "difficulty": "medium",
+          "explanation": "The article describes Curie as Polish and later naturalized-French.",
+          "section": "Life"
+        },
+        {
+          "question": "What major scientific honor is repeatedly associated with Curie?",
+          "options": [
+            "Nobel Prize",
+            "Fields Medal",
+            "Turing Award",
+            "Booker Prize"
+          ],
+          "answer": "Nobel Prize",
+          "difficulty": "hard",
+          "explanation": "The article includes a Nobel Prizes section and discusses her awards.",
+          "section": "Nobel Prizes"
+        }
+      ],
+      "related_topics": [
+        "Radioactivity",
+        "Nobel Prize",
+        "Pierre Curie",
+        "History of physics"
+      ],
+      "created_at": "2026-05-21T10:10:00Z"
+    }
+  ]
+}
