@@ -83,23 +83,6 @@ function groupQuestionsBySection(quiz, articleSections = []) {
 
 function renderQuiz(data, container, options = {}) {
   const groups = groupQuestionsBySection(data.quiz, data.sections);
-  let questionNumber = 0;
-  const groupedCards = groups
-    .map(({ section, questions }) => {
-      const cards = questions
-        .map((item) => {
-          questionNumber += 1;
-          return renderQuestionCard(item, questionNumber);
-        })
-        .join("");
-      return `
-        <section class="quiz-section-group">
-          <h3 class="quiz-section-title">${escapeHtml(section)}</h3>
-          ${cards}
-        </section>
-      `;
-    })
-    .join("");
 
   container.innerHTML = `
     <article class="article-summary">
@@ -112,8 +95,7 @@ function renderQuiz(data, container, options = {}) {
       </ul>
       <ul class="topics">${data.related_topics.map((topic) => `<li class="pill">${escapeHtml(topic)}</li>`).join("")}</ul>
     </article>
-    ${groupedCards}
-    ${options.includeTakeMode ? renderTakeQuiz(groups) : ""}
+    ${options.includeTakeMode ? renderTakeQuiz(groups) : renderReviewOnly(groups)}
   `;
   if (options.includeTakeMode) wireTakeQuiz(container, groups);
 }
@@ -122,29 +104,33 @@ function renderEntityPills(label, values = []) {
   return values.slice(0, 5).map((value) => `<li class="pill">${label}: ${escapeHtml(value)}</li>`).join("");
 }
 
-function renderQuestionCard(item, index) {
-  return `
-    <article class="quiz-card">
-      <div class="section-heading">
-        <h4>${index}. ${escapeHtml(item.question)}</h4>
-        <span class="difficulty">${escapeHtml(item.difficulty)}</span>
-      </div>
-      <div class="options">
-        ${item.options.map((option, optionIndex) => `<div class="option">${String.fromCharCode(65 + optionIndex)}. ${escapeHtml(option)}</div>`).join("")}
-      </div>
-      <details class="answer-details">
-        <summary>Show answer</summary>
-        <p class="answer">Answer: ${escapeHtml(item.answer)}</p>
-        <p>${escapeHtml(item.explanation)}</p>
-      </details>
-    </article>
-  `;
+function renderReviewOnly(groups) {
+  let questionNumber = 0;
+  return groups
+    .map(({ section, questions }) => {
+      const cards = questions
+        .map((item) => {
+          questionNumber += 1;
+          return `
+            <article class="quiz-card">
+              <h4>${questionNumber}. ${escapeHtml(item.question)}</h4>
+              <p class="answer">Answer: ${escapeHtml(item.answer)}</p>
+            </article>
+          `;
+        })
+        .join("");
+      return `<section class="quiz-section-group"><h3 class="quiz-section-title">${escapeHtml(section)}</h3>${cards}</section>`;
+    })
+    .join("");
 }
 
 function renderTakeQuestion(item, globalIndex, localIndex) {
   return `
-    <div class="take-question">
-      <h4>${localIndex}. ${escapeHtml(item.question)}</h4>
+    <div class="take-question" data-question-index="${globalIndex}">
+      <div class="take-question-head">
+        <h4>${localIndex}. ${escapeHtml(item.question)}</h4>
+        <span class="difficulty">${escapeHtml(item.difficulty)}</span>
+      </div>
       ${item.options
         .map(
           (option) => `
@@ -193,12 +179,16 @@ function renderTakeQuiz(groups) {
   return `
     <section class="take-quiz" data-take-quiz-root>
       <div class="take-quiz-header">
-        <h2>Take Quiz</h2>
+        <h2>Quiz</h2>
+        <p class="take-hint">Answer each question. Answers are hidden until you submit the full quiz.</p>
         <p class="take-progress" data-take-progress>Section 1 of ${groups.length}: ${escapeHtml(firstSection)}</p>
       </div>
-      <div class="take-section-panels">${panels}</div>
+      <div class="take-section-panels" data-take-panels>${panels}</div>
       <p class="take-message" data-take-message aria-live="polite"></p>
-      <p class="score" data-take-score aria-live="polite"></p>
+      <div class="take-score-panel hidden" data-take-score-panel>
+        <p class="score" data-take-score aria-live="polite"></p>
+        <div class="quiz-results" data-quiz-results></div>
+      </div>
     </section>
   `;
 }
@@ -255,30 +245,73 @@ function wireTakeQuiz(container, groups) {
           message.textContent = "Answer every question in this section before submitting.";
           return;
         }
-        scoreQuiz(container, flatQuiz, root);
+        scoreQuiz(container, flatQuiz, groups, root);
       });
     }
   });
 }
 
-function scoreQuiz(container, quiz, takeRoot) {
+function scoreQuiz(container, quiz, groups, takeRoot) {
   let score = 0;
   quiz.forEach((item, index) => {
     const selected = container.querySelector(`input[name="question-${index}"]:checked`);
     if (selected && selected.value === item.answer) score += 1;
   });
 
-  const scoreEl = takeRoot?.querySelector("[data-take-score]") || container.querySelector(".score");
-  const messageEl = takeRoot?.querySelector("[data-take-message]");
-  if (scoreEl) scoreEl.textContent = `Score: ${score} / ${quiz.length}`;
+  const messageEl = takeRoot.querySelector("[data-take-message]");
+  const progressEl = takeRoot.querySelector("[data-take-progress]");
+  const scorePanel = takeRoot.querySelector("[data-take-score-panel]");
+  const scoreEl = takeRoot.querySelector("[data-take-score]");
+  const resultsEl = takeRoot.querySelector("[data-quiz-results]");
+
   if (messageEl) messageEl.textContent = "";
+  if (progressEl) progressEl.textContent = "Quiz complete";
+  if (scoreEl) scoreEl.textContent = `Your score: ${score} / ${quiz.length}`;
+  if (scorePanel) scorePanel.classList.remove("hidden");
+
+  const panelsWrap = takeRoot.querySelector("[data-take-panels]");
+  if (panelsWrap) panelsWrap.classList.add("hidden");
 
   container.querySelectorAll(".take-quiz input[type='radio']").forEach((input) => {
     input.disabled = true;
   });
-  container.querySelectorAll("[data-take-next], [data-submit-quiz]").forEach((button) => {
-    button.disabled = true;
+  container.querySelectorAll(".take-actions").forEach((block) => {
+    block.remove();
   });
+
+  if (resultsEl) {
+    let globalIndex = 0;
+    resultsEl.innerHTML = groups
+      .map((group) => {
+        const items = group.questions
+          .map((item) => {
+            const index = globalIndex;
+            globalIndex += 1;
+            const selected = container.querySelector(`input[name="question-${index}"]:checked`);
+            const picked = selected?.value || "No answer";
+            const correct = picked === item.answer;
+            return `
+              <article class="quiz-result ${correct ? "is-correct" : "is-wrong"}">
+                <p class="quiz-result-status">${correct ? "Correct" : "Incorrect"}</p>
+                <h4>${escapeHtml(item.question)}</h4>
+                <p>Your answer: ${escapeHtml(picked)}</p>
+                ${correct ? "" : `<p class="answer">Correct answer: ${escapeHtml(item.answer)}</p>`}
+                <p>${escapeHtml(item.explanation)}</p>
+              </article>
+            `;
+          })
+          .join("");
+        return `
+          <section class="quiz-results-section">
+            <h3>${escapeHtml(group.section)}</h3>
+            ${items}
+          </section>
+        `;
+      })
+      .join("");
+  }
+
+  scorePanel?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 function setStatus(message) {

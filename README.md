@@ -113,7 +113,7 @@ Defined in `backend/app/llm.py` as `QUIZ_PROMPT_TEMPLATE`:
 
 | Feature | Where |
 |---------|--------|
-| Take Quiz + scoring | `frontend/app.js` — one section at a time; **Next section** then **Submit quiz** |
+| Take Quiz + scoring | `frontend/app.js` — single quiz flow (no answer reveal before submit); section-by-section, then score + review |
 | URL validation + auto-preview | `backend/app/scraper.py`, `frontend/app.js` |
 | Raw HTML in DB | `QuizRecord.raw_html` |
 | URL caching | `POST /api/quizzes/generate` + `cached: true` in response |
