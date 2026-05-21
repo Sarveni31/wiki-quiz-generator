@@ -315,9 +315,42 @@ dialog::backdrop {
   padding: 0;
 }
 
+.take-quiz-header {
+  margin-bottom: 16px;
+}
+
+.take-quiz-header h2 {
+  margin: 0 0 6px;
+}
+
+.take-progress {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.take-section-panel {
+  display: none;
+}
+
+.take-section-panel.active {
+  display: block;
+}
+
+.take-section-heading {
+  margin: 0 0 12px;
+  color: var(--accent-strong);
+  font-size: 1.05rem;
+}
+
 .take-question {
   border-top: 1px solid var(--line);
   padding: 14px 0;
+}
+
+.take-question h4 {
+  margin: 0 0 10px;
+  font-size: 1rem;
 }
 
 .take-option {
@@ -325,7 +358,21 @@ dialog::backdrop {
   margin: 8px 0;
 }
 
-.score {
+.take-actions {
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+
+.take-message {
+  min-height: 1.25rem;
+  margin: 12px 0 0;
+  color: var(--warn);
+  font-weight: 600;
+}
+
+.score,
+[data-take-score] {
   margin-top: 12px;
   color: var(--good);
   font-weight: 800;

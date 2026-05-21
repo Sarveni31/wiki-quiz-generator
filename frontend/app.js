@@ -171,10 +171,9 @@ function renderQuiz(data, container, options = {}) {
       <ul class="topics">${data.related_topics.map((topic) => `<li class="pill">${escapeHtml(topic)}</li>`).join("")}</ul>
     </article>
     ${groupedCards}
-    ${options.includeTakeMode ? renderTakeQuiz(data.quiz) : ""}
+    ${options.includeTakeMode ? renderTakeQuiz(groups) : ""}
   `;
-  const submit = container.querySelector("[data-submit-quiz]");
-  if (submit) submit.addEventListener("click", () => scoreQuiz(container, data.quiz));
+  if (options.includeTakeMode) wireTakeQuiz(container, groups);
 }
 
 function renderEntityPills(label, values = []) {
@@ -200,36 +199,144 @@ function renderQuestionCard(item, index) {
   `;
 }
 
-function renderTakeQuiz(quiz) {
+function renderTakeQuestion(item, globalIndex, localIndex) {
   return `
-    <section class="take-quiz">
-      <div class="section-heading">
-        <h2>Take Quiz</h2>
-        <button data-submit-quiz>Submit Answers</button>
-      </div>
-      ${quiz.map((item, index) => `
-        <div class="take-question">
-          <h3>${index + 1}. ${escapeHtml(item.question)}</h3>
-          ${item.options.map((option) => `
-            <label class="take-option">
-              <input type="radio" name="question-${index}" value="${escapeHtml(option)}">
-              ${escapeHtml(option)}
-            </label>
-          `).join("")}
+    <div class="take-question">
+      <h4>${localIndex}. ${escapeHtml(item.question)}</h4>
+      ${item.options
+        .map(
+          (option) => `
+        <label class="take-option">
+          <input type="radio" name="question-${globalIndex}" value="${escapeHtml(option)}">
+          ${escapeHtml(option)}
+        </label>
+      `
+        )
+        .join("")}
+    </div>
+  `;
+}
+
+function renderTakeQuiz(groups) {
+  if (!groups.length) return "";
+
+  let globalIndex = 0;
+  const panels = groups
+    .map((group, sectionIndex) => {
+      const isLast = sectionIndex === groups.length - 1;
+      let localIndex = 0;
+      const questionsHtml = group.questions
+        .map((item) => {
+          localIndex += 1;
+          const html = renderTakeQuestion(item, globalIndex, localIndex);
+          globalIndex += 1;
+          return html;
+        })
+        .join("");
+      const actionButton = isLast
+        ? `<button type="button" data-submit-quiz>Submit quiz</button>`
+        : `<button type="button" data-take-next>Next section</button>`;
+
+      return `
+        <div class="take-section-panel${sectionIndex === 0 ? " active" : ""}" data-section-index="${sectionIndex}">
+          <h3 class="take-section-heading">${escapeHtml(group.section)}</h3>
+          ${questionsHtml}
+          <div class="take-actions">${actionButton}</div>
         </div>
-      `).join("")}
-      <div class="score" aria-live="polite"></div>
+      `;
+    })
+    .join("");
+
+  const firstSection = groups[0].section;
+  return `
+    <section class="take-quiz" data-take-quiz-root>
+      <div class="take-quiz-header">
+        <h2>Take Quiz</h2>
+        <p class="take-progress" data-take-progress>Section 1 of ${groups.length}: ${escapeHtml(firstSection)}</p>
+      </div>
+      <div class="take-section-panels">${panels}</div>
+      <p class="take-message" data-take-message aria-live="polite"></p>
+      <p class="score" data-take-score aria-live="polite"></p>
     </section>
   `;
 }
 
-function scoreQuiz(container, quiz) {
+function wireTakeQuiz(container, groups) {
+  const root = container.querySelector("[data-take-quiz-root]");
+  if (!root || !groups.length) return;
+
+  const flatQuiz = groups.flatMap((group) => group.questions);
+  const panels = Array.from(root.querySelectorAll(".take-section-panel"));
+  const progress = root.querySelector("[data-take-progress]");
+  const message = root.querySelector("[data-take-message]");
+  let currentSection = 0;
+
+  const showSection = (index) => {
+    panels.forEach((panel, panelIndex) => {
+      panel.classList.toggle("active", panelIndex === index);
+    });
+    const sectionName = groups[index]?.section || "General";
+    progress.textContent = `Section ${index + 1} of ${groups.length}: ${sectionName}`;
+    message.textContent = "";
+  };
+
+  const sectionIsComplete = (panel) => {
+    const names = new Set(
+      Array.from(panel.querySelectorAll('input[type="radio"]')).map((input) => input.name)
+    );
+    for (const name of names) {
+      if (!panel.querySelector(`input[name="${CSS.escape(name)}"]:checked`)) return false;
+    }
+    return names.size > 0;
+  };
+
+  panels.forEach((panel) => {
+    const nextButton = panel.querySelector("[data-take-next]");
+    if (nextButton) {
+      nextButton.addEventListener("click", () => {
+        if (!sectionIsComplete(panel)) {
+          message.textContent = "Answer every question in this section before continuing.";
+          return;
+        }
+        if (currentSection < groups.length - 1) {
+          currentSection += 1;
+          showSection(currentSection);
+          panel.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      });
+    }
+
+    const submitButton = panel.querySelector("[data-submit-quiz]");
+    if (submitButton) {
+      submitButton.addEventListener("click", () => {
+        if (!sectionIsComplete(panel)) {
+          message.textContent = "Answer every question in this section before submitting.";
+          return;
+        }
+        scoreQuiz(container, flatQuiz, root);
+      });
+    }
+  });
+}
+
+function scoreQuiz(container, quiz, takeRoot) {
   let score = 0;
   quiz.forEach((item, index) => {
     const selected = container.querySelector(`input[name="question-${index}"]:checked`);
     if (selected && selected.value === item.answer) score += 1;
   });
-  container.querySelector(".score").textContent = `Score: ${score} / ${quiz.length}`;
+
+  const scoreEl = takeRoot?.querySelector("[data-take-score]") || container.querySelector(".score");
+  const messageEl = takeRoot?.querySelector("[data-take-message]");
+  if (scoreEl) scoreEl.textContent = `Score: ${score} / ${quiz.length}`;
+  if (messageEl) messageEl.textContent = "";
+
+  container.querySelectorAll(".take-quiz input[type='radio']").forEach((input) => {
+    input.disabled = true;
+  });
+  container.querySelectorAll("[data-take-next], [data-submit-quiz]").forEach((button) => {
+    button.disabled = true;
+  });
 }
 
 function looksLikeWikiUrl(url) {
