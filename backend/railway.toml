@@ -1,0 +1,11 @@
+# Use this only if the Railway service "Root Directory" is set to `backend`.
+# Recommended: leave Root Directory empty and use the railway.toml at the repo root instead.
+
+[build]
+builder = "NIXPACKS"
+buildCommand = "pip install -r requirements.txt"
+
+[deploy]
+startCommand = "uvicorn app.main:app --host 0.0.0.0 --port $PORT"
+healthcheckPath = "/api/health"
+healthcheckTimeout = 120

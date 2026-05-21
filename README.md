@@ -164,9 +164,10 @@ Repo includes `start.sh`, `build.sh`, `railway.toml`, and root `requirements.txt
 2. Add a **PostgreSQL** service and link `DATABASE_URL` to the web service.
 3. Set variables: `GEMINI_API_KEY`, `GEMINI_MODEL` (optional), `MOCK_LLM` (`false` for real quizzes).
 4. Deploy settings (usually auto-detected from `railway.toml`):
-   - **Root directory:** leave empty (repo root). Do not set a subdirectory.
-   - **Build:** `pip install -r requirements.txt` (or `./build.sh`)
-   - **Start:** `./start.sh` (or `uvicorn backend.app.main:app --host 0.0.0.0 --port $PORT`)
+   - **Root directory:** leave **empty** (repo root). If you set `backend`, `start.sh` is missing and the UI may not deploy.
+   - **Build:** `pip install -r requirements.txt`
+   - **Start:** `uvicorn backend.app.main:app --host 0.0.0.0 --port $PORT`
+   - If Root Directory must be `backend`, use `backend/railway.toml` and `uvicorn app.main:app` (API only; use GitHub Pages for the UI).
 5. Generate a public Railway domain and test preview, generate, history, details, and Take Quiz.
 
 `backend/app/database.py` accepts `postgresql://` and `postgres://` URLs from Railway or Neon and converts them for psycopg automatically.

@@ -12,8 +12,22 @@ from .models import QuizRecord
 from .schemas import ArticlePreview, GenerateQuizRequest, QuizListItem, QuizResponse
 from .scraper import normalize_wikipedia_url, scrape_article
 
-ROOT_DIR = Path(__file__).resolve().parents[2]
-FRONTEND_DIR = ROOT_DIR / "frontend"
+def _resolve_frontend_dir() -> Path | None:
+    start = Path(__file__).resolve().parent
+    candidates = [
+        start.parent.parent,  # repo root when layout is backend/app/main.py
+        start.parent,  # backend/ when frontend is copied here
+        Path.cwd(),
+        Path.cwd().parent,
+    ]
+    for root in candidates:
+        frontend = root / "frontend"
+        if frontend.is_dir():
+            return frontend
+    return None
+
+
+FRONTEND_DIR = _resolve_frontend_dir()
 
 app = FastAPI(title="Wiki Quiz Generator")
 app.add_middleware(
@@ -109,6 +123,6 @@ def get_quiz(quiz_id: int, db: Session = Depends(get_db)) -> QuizResponse:
     return to_response(record)
 
 
-if FRONTEND_DIR.exists():
+if FRONTEND_DIR is not None:
     app.mount("/", StaticFiles(directory=FRONTEND_DIR, html=True), name="frontend")
 
