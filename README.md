@@ -2,11 +2,13 @@
 
 Full-stack app that turns a Wikipedia article URL into a grounded multiple-choice quiz using Gemini (LangChain), stores results in PostgreSQL, and shows history in a two-tab web UI.
 
+**Live app:** https://web-production-9f4b63.up.railway.app/
+
 **Repository:** https://github.com/Sarveni31/wiki-quiz-generator
 
 | Deployment | URL | What it does |
 |------------|-----|----------------|
-| **Railway (recommended)** | Your `*.up.railway.app` domain | Full app: scrape, Gemini, database, UI |
+| **Railway (recommended)** | https://web-production-9f4b63.up.railway.app/ | Full app: scrape, Gemini, database, UI |
 | **GitHub Pages** | `https://sarveni31.github.io/wiki-quiz-generator/` | Static demo only (`sample_data` JSON) |
 | **Local** | `http://127.0.0.1:8000` | Full app on your machine |
 
@@ -60,7 +62,7 @@ Never commit `.env`.
    - Start: `uvicorn backend.app.main:app --host 0.0.0.0 --port $PORT`
    - Health: `/health`
 6. Test:
-   - `https://YOUR-DOMAIN.up.railway.app/health` → `{"status":"ok"}`
+   - https://web-production-9f4b63.up.railway.app/health → `{"status":"ok"}`
    - Generate quiz for `https://en.wikipedia.org/wiki/Alan_Turing`
 
 **Gemini quota (429):** Wait, use a new key in a **new** project, or set `MOCK_LLM=true` for a UI-only demo.
