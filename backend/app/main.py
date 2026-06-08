@@ -1,4 +1,5 @@
 import logging
+import threading
 import time
 from pathlib import Path
 
@@ -45,8 +46,7 @@ app.add_middleware(
 )
 
 
-@app.on_event("startup")
-def on_startup() -> None:
+def _init_db_with_retries() -> None:
     for attempt in range(1, 11):
         try:
             init_db()
@@ -61,6 +61,11 @@ def on_startup() -> None:
                 )
                 return
             time.sleep(3)
+
+
+@app.on_event("startup")
+def on_startup() -> None:
+    threading.Thread(target=_init_db_with_retries, daemon=True).start()
 
 
 def to_response(record: QuizRecord, *, cached: bool = False) -> QuizResponse:
